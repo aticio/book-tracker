@@ -46,16 +46,11 @@ def on_message(w_s, message):
         sell_side = float(book_ticker_data['b']) * float(book_ticker_data['B'])
         buy_side = float(book_ticker_data['a']) * float(book_ticker_data['A'])
         delta = buy_side - sell_side
-        print(delta)
-    # sequence = []
-    # for t in ticker_data:
-    #     if "BUSD" in t["s"]:
-    #         sequence.append(f"tick,symbol={t['s']} price={t['c']},volume={t['v']}")
-
-    # with InfluxDBClient(url="http://localhost:8086", token=token, org=org) as client:
-    #     write_api = client.write_api(write_options=SYNCHRONOUS)
-    #     write_api.write(bucket, org, sequence)
-    #     client.close()
+        data = f"book_ticker,symbol={book_ticker_data['s']} delta={delta}"   
+        with InfluxDBClient(url="http://localhost:8086", token=token, org=org) as client:
+            write_api = client.write_api(write_options=SYNCHRONOUS)
+            write_api.write(bucket, org, data)
+            client.close()
 
 
 if __name__ == "__main__":
